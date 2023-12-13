@@ -2,10 +2,10 @@ import {BiFoodTag} from 'react-icons/bi'
 import './index.css'
 
 const Category = props => {
-  const {nextComponent, onDecrease} = props
+  const {nextComponent, onDecreaseIncrease} = props
 
   const onAddToCart = (dishId, operator) => {
-    onDecrease(dishId, operator)
+    onDecreaseIncrease(dishId, operator)
   }
 
   return (
@@ -21,8 +21,9 @@ const Category = props => {
             <div className="sub_details">
               <h1 className="heading">{each.dish_name}</h1>
               <div className="price_details">
-                <p>{each.dish_currency}</p>
-                <p>{each.dish_price}</p>
+                <p>
+                  {each.dish_currency} {each.dish_price}
+                </p>
               </div>
               <p className="description_details">{each.dish_description}</p>
               {each.dish_Availability === false ? (

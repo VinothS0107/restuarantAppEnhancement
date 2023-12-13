@@ -77,7 +77,13 @@
     width: 80px;
   }
 }
-
+.description_details {
+  font-family: 'Roboto';
+  font-size: 15px;
+  width: 100px;
+  color: #5b5b5b;
+  word-wrap: break-word;
+}
 @media (min-width: 768px) {
   .description_details {
     font-family: 'Roboto';
@@ -118,10 +124,14 @@
 }
 
 .dish_image {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
 }
 @media (min-width: 768px) {
+  .dish_image {
+    width: 150px;
+    height: 150px;
+  }
 }
 .not_available {
   color: #ff1e1e;

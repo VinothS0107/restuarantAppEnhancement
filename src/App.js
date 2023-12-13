@@ -16,7 +16,7 @@ class App extends Component {
     status: apiStatusConstants.initial,
     restaurantName: '',
     listMenu: [],
-    value: 'Salads and Soup',
+    value: '',
     count: 0,
   }
 
@@ -26,7 +26,6 @@ class App extends Component {
 
   getApi = async () => {
     this.setState({status: apiStatusConstants.inProgress})
-
     const dishesApiUrl =
       'https://run.mocky.io/v3/77a7e71b-804a-4fbd-822c-3e365d3482cc'
     const response = await fetch(dishesApiUrl)
@@ -35,7 +34,7 @@ class App extends Component {
     const dishQuantityAdd = data[0].table_menu_list.map(each => ({
       category_dishes: each.category_dishes.map(cate => ({
         ...cate,
-        dish_quantity: 0,
+        dish_quantity: '0',
       })),
       menu_category: each.menu_category,
       menu_categoryId: each.menu_category_id,
@@ -43,45 +42,37 @@ class App extends Component {
     this.setState({
       listMenu: dishQuantityAdd,
       restaurantName,
+      value: dishQuantityAdd[0].menu_category,
       status: apiStatusConstants.success,
     })
   }
 
-  onChooseList = event => {
-    const chosenMenu = event.target.innerText
-    this.setState({value: chosenMenu})
+  onChooseList = value => {
+    this.setState({value})
   }
 
-  totalCounter = operator => {
-    if (operator === 'increment') {
-      this.setState(prevs => ({
-        count: prevs.count + 1,
-      }))
-    } else if (operator === 'decrement') {
-      this.setState(prevs => ({
-        count: prevs.count - 1,
-      }))
-    }
-  }
-
-  onDecreaseCount = (dishId, operator) => {
+  onIncreaseDecreaseCount = (dishId, operator) => {
     const {listMenu} = this.state
     const finalValue = listMenu.map(each => ({
       ...each,
       category_dishes: each.category_dishes.map(eachDish => {
         if (eachDish.dish_id === dishId) {
           if (operator === 'decrement' && eachDish.dish_quantity > 0) {
-            this.totalCounter('decrement')
+            this.setState(prevs => ({
+              count: prevs.count - 1,
+            }))
             return {
               ...eachDish,
-              dish_quantity: eachDish.dish_quantity - 1,
+              dish_quantity: parseInt(eachDish.dish_quantity) - 1,
             }
           }
           if (operator === 'increment') {
-            this.totalCounter('increment')
+            this.setState(prevs => ({
+              count: prevs.count + 1,
+            }))
             return {
               ...eachDish,
-              dish_quantity: eachDish.dish_quantity + 1,
+              dish_quantity: parseInt(eachDish.dish_quantity) + 1,
             }
           }
         }
@@ -104,7 +95,7 @@ class App extends Component {
       <>
         <ul className="menu_container">
           {listMenu.map(each => (
-            <li key={each.menu_categoryId} onClick={this.onChooseList}>
+            <li key={each.menu_categoryId}>
               <button
                 type="button"
                 className={
@@ -112,6 +103,7 @@ class App extends Component {
                     ? 'chosen-button'
                     : 'category-button'
                 }
+                onClick={() => this.onChooseList(each.menu_category)}
               >
                 {each.menu_category}
               </button>
@@ -122,7 +114,7 @@ class App extends Component {
           <Category
             nextComponent={each.category_dishes}
             key={each.menu_categoryId}
-            onDecrease={this.onDecreaseCount}
+            onDecreaseIncrease={this.onIncreaseDecreaseCount}
           />
         ))}
       </>
