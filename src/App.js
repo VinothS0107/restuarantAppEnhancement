@@ -1,7 +1,10 @@
 import {Component} from 'react'
-import Loader from 'react-loader-spinner'
-import Header from './components/Header'
-import Category from './components/Category'
+import {Route, Switch} from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
+import Home from './components/Home'
+import Cart from './components/Cart'
+import Login from './components/Login'
+import context from './context'
 import './App.css'
 
 const apiStatusConstants = {
@@ -13,11 +16,11 @@ const apiStatusConstants = {
 
 class App extends Component {
   state = {
+    listMenu: [],
     status: apiStatusConstants.initial,
     restaurantName: '',
-    listMenu: [],
     value: '',
-    count: 0,
+    cartList: [],
   }
 
   componentDidMount() {
@@ -47,11 +50,7 @@ class App extends Component {
     })
   }
 
-  onChooseList = value => {
-    this.setState({value})
-  }
-
-  onIncreaseDecreaseCount = (dishId, operator) => {
+  onOperator = (dishId, operator) => {
     const {listMenu} = this.state
     const finalValue = listMenu.map(each => ({
       ...each,
@@ -82,55 +81,109 @@ class App extends Component {
     this.setState({listMenu: finalValue})
   }
 
-  renderLoader = () => (
-    <div data-testid="loader" className="loader-container">
-      <Loader type="Rings" color="#00BFFF" height={80} width={80} />
-    </div>
-  )
+  chosenList = valueChosen => {
+    this.setState({value: valueChosen})
+  }
 
-  renderSuccessView = () => {
-    const {listMenu, value} = this.state
-    const filteredDishes = listMenu.filter(each => each.menu_category === value)
-    return (
-      <>
-        <ul className="menu_container">
-          {listMenu.map(each => (
-            <li key={each.menu_categoryId}>
-              <button
-                type="button"
-                className={
-                  each.menu_category === value
-                    ? 'chosen-button'
-                    : 'category-button'
-                }
-                onClick={() => this.onChooseList(each.menu_category)}
-              >
-                {each.menu_category}
-              </button>
-            </li>
-          ))}
-        </ul>
-        {filteredDishes.map(each => (
-          <Category
-            nextComponent={each.category_dishes}
-            key={each.menu_categoryId}
-            onDecreaseIncrease={this.onIncreaseDecreaseCount}
-          />
-        ))}
-      </>
-    )
+  addCartItem = dishId => {
+    let filtered = []
+    const {listMenu, cartList} = this.state
+    listMenu.forEach(each => {
+      filtered = [...filtered, ...each.category_dishes]
+      return filtered
+    })
+    const chosenId = filtered.find(each => each.dish_id === dishId)
+    const checkCart = cartList.find(each => each.dish_id === chosenId.dish_id)
+    if (checkCart === undefined) {
+      this.setState({
+        cartList: [...cartList, chosenId],
+      })
+    } else {
+      const checkList = cartList.map(each => {
+        if (each.dish_id === dishId) {
+          return {...each, dish_quantity: each.dish_quantity + 1}
+        }
+        return each
+      })
+      this.setState({
+        cartList: checkList,
+      })
+    }
+  }
+
+  incrementCartItemQuantity = id => {
+    const {cartList} = this.state
+    const increased = cartList.map(each => {
+      if (each.dish_id === id) {
+        return {...each, dish_quantity: each.dish_quantity + 1}
+      }
+      return each
+    })
+    this.setState({cartList: increased})
+  }
+
+  decrementCartItemQuantity = id => {
+    const {cartList} = this.state
+    const checkQuantity = cartList.find(each => each.dish_id === id)
+    if (checkQuantity.dish_quantity === 1) {
+      const leftCartList = cartList.filter(each => each.dish_id !== id)
+      this.setState({cartList: leftCartList})
+    } else {
+      const decreased = cartList.map(each => {
+        if (each.dish_id === id) {
+          return {...each, dish_quantity: each.dish_quantity - 1}
+        }
+        return each
+      })
+      this.setState({cartList: decreased})
+    }
+  }
+
+  removeCartItem = id => {
+    const {cartList} = this.state
+    const leftCartList = cartList.filter(each => each.dish_id !== id)
+    this.setState({cartList: leftCartList})
+  }
+
+  removeAllCartItems = () => {
+    this.setState({cartList: []})
   }
 
   render() {
-    const {count, restaurantName, status} = this.state
+    const {
+      listMenu,
+      status,
+      restaurantName,
+      value,
+      count,
+      cartList,
+    } = this.state
 
     return (
-      <>
-        <Header count={count} restaurantName={restaurantName} />
-        {status === apiStatusConstants.inProgress
-          ? this.renderLoader()
-          : this.renderSuccessView()}
-      </>
+      <context.Provider
+        value={{
+          listMenu,
+          status,
+          restaurantName,
+          value,
+          count,
+          cartList,
+          getApi: this.getApi,
+          onOperator: this.onOperator,
+          chosenList: this.chosenList,
+          removeAllCartItems: this.removeAllCartItems,
+          addCartItem: this.addCartItem,
+          removeCartItem: this.removeCartItem,
+          incrementCartItemQuantity: this.incrementCartItemQuantity,
+          decrementCartItemQuantity: this.decrementCartItemQuantity,
+        }}
+      >
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <ProtectedRoute exact path="/" component={Home} />
+          <ProtectedRoute exact path="/cart" component={Cart} staticContext />
+        </Switch>
+      </context.Provider>
     )
   }
 }

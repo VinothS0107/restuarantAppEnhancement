@@ -16,10 +16,12 @@
   font-family: 'Roboto';
   font-size: 20px;
   font-weight: 700;
+  color: black;
 }
 @media (min-width: 768px) {
   .heading {
     font-size: 30px;
+    color: black;
   }
 }
 .card_container {
@@ -27,7 +29,12 @@
   align-items: center;
 }
 .my_order {
-  display: none;
+  display: flex;
+  font-family: 'Roboto';
+  font-size: 15px;
+  font-weight: 500;
+  color: #5b5b5b;
+  margin: 0px 10px 0px 0px;
 }
 @media (min-width: 768px) {
   .my_order {
@@ -36,6 +43,7 @@
     font-size: 20px;
     font-weight: 500;
     color: #5b5b5b;
+    margin: 0px 10px 0px 0px;
   }
 }
 .icon_cart {
@@ -53,4 +61,26 @@
   height: 23px;
   text-align: center;
   color: #ffffff;
+}
+.cartButton {
+  background-color: transparent;
+  border: none;
+}
+.buttonLogout {
+  margin: 0px 10px 0px 20px;
+  background-color: blue;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+.chosenLink {
+  color: brown !important;
 }

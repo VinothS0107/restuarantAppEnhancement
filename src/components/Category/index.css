@@ -1,25 +1,41 @@
 .dish {
   display: flex;
   flex-direction: column;
+  width: 95%;
 }
 @media (min-width: 768px) {
+  .dish {
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+  }
 }
 
 .veg {
   color: #3e8245;
-  font-size: 30px;
-  margin-top: 16px;
+  font-size: 40px;
+  margin-top: 11px;
 }
 @media (min-width: 768px) {
+  .veg {
+    color: #3e8245;
+    font-size: 40px;
+    margin-top: 14px;
+  }
 }
 
 .non_veg {
   color: #72231c;
-  font-size: 30px;
-  margin-top: 16px;
+  font-size: 40px;
+  margin-top: 11px;
 }
 
 @media (min-width: 768px) {
+  .non_veg {
+    color: #72231c;
+    font-size: 40px;
+    margin-top: 16px;
+  }
 }
 .item_details {
   display: flex;
@@ -145,7 +161,7 @@
   color: #f6be00;
   font-family: 'Roboto';
   font-size: 16px;
-  font-family: 700;
+  font-weight: 700;
 }
 .image_list {
   width: 400px;
@@ -153,4 +169,22 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.addtocart {
+  background-color: #2986cc;
+  font-family: 'Roboto';
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  height: 30px;
+  cursor: pointer;
+  margin: 10px 0px 10px 0px;
+}
+@media (min-width: 768px) {
+  .addtocart {
+    width: 100px;
+  }
 }
