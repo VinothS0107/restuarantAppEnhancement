@@ -4,7 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Home from './components/Home'
 import Cart from './components/Cart'
 import Login from './components/Login'
-import context from './context/CartContext'
+import CartContext from './context/CartContext'
 import './App.css'
 
 class App extends Component {
