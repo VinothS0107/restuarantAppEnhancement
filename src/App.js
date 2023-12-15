@@ -5,7 +5,10 @@ import Home from './components/Home'
 import Cart from './components/Cart'
 import Login from './components/Login'
 import CartContext from './context/CartContext'
+<<<<<<< HEAD
 import NotFound from './components/NotFound'
+=======
+>>>>>>> 3d710264beb6819b8e1e5b9db066106c6413fda1
 import './App.css'
 
 const apiStatusConstants = {
