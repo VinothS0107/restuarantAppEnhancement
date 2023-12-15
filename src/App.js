@@ -90,7 +90,7 @@ class App extends Component {
     const {restaurantName, value, count, cartList} = this.state
 
     return (
-      <context.Provider
+      <CartContext.Provider
         value={{
           restaurantName,
           value,
@@ -111,7 +111,7 @@ class App extends Component {
           <ProtectedRoute exact path="/" component={Home} />
           <ProtectedRoute exact path="/cart" component={Cart} />
         </Switch>
-      </context.Provider>
+      </CartContext.Provider>
     )
   }
 }
