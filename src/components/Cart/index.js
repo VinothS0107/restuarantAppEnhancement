@@ -4,7 +4,7 @@ import Header from '../Header'
 import CartContext from '../../context/CartContext'
 import './index.css'
 
-const Cart = props => (
+const Cart = () => (
   <CartContext.Consumer>
     {countValue => {
       const {
@@ -15,7 +15,7 @@ const Cart = props => (
         removeAllCartItems,
       } = countValue
       const cartLength = cartList.length
-      console.log(props)
+
       const onDecrement = id => {
         decrementCartItemQuantity(id)
       }

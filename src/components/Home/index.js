@@ -16,7 +16,7 @@ class Home extends Component {
   state = {
     status: apiStatusConstants.initial,
     listMenu: [],
-    value: '',
+    valueCheck: '',
   }
 
   componentDidMount() {
@@ -39,7 +39,7 @@ class Home extends Component {
     }))
     this.setState({
       listMenu: dishQuantityAdd,
-      value: dishQuantityAdd[0].menu_category,
+      valueCheck: dishQuantityAdd[0].menu_category,
       status: apiStatusConstants.success,
     })
   }
@@ -75,8 +75,8 @@ class Home extends Component {
     this.setState({listMenu: finalValue})
   }
 
-  onChosenList = valueChosen => {
-    this.setState({value: valueChosen})
+  chosenList = valueChosen => {
+    this.setState({valueCheck: valueChosen})
   }
 
   renderLoader = () => (
@@ -86,8 +86,10 @@ class Home extends Component {
   )
 
   renderSuccessView = () => {
-    const {listMenu, value} = this.state
-    const filteredDishes = listMenu.filter(each => each.menu_category === value)
+    const {listMenu, valueCheck} = this.state
+    const filteredDishes = listMenu.filter(
+      each => each.menu_category === valueCheck,
+    )
     return (
       <>
         <ul className="menu_container">
@@ -96,11 +98,11 @@ class Home extends Component {
               <button
                 type="button"
                 className={
-                  each.menu_category === value
+                  each.menu_category === valueCheck
                     ? 'chosen-button'
                     : 'category-button'
                 }
-                onClick={() => this.onChosenList(each.menu_category)}
+                onClick={() => this.chosenList(each.menu_category)}
               >
                 {each.menu_category}
               </button>
@@ -119,19 +121,15 @@ class Home extends Component {
   }
 
   render() {
-    const {restaurantName, status} = this.state
+    const {status} = this.state
 
     return (
-      <CartContext.Consumer>
-        {() => (
-          <>
-            <Header />
-            {status === apiStatusConstants.inProgress
-              ? this.renderLoader()
-              : this.renderSuccessView()}
-          </>
-        )}
-      </CartContext.Consumer>
+      <>
+        <Header />
+        {status === apiStatusConstants.inProgress
+          ? this.renderLoader()
+          : this.renderSuccessView()}
+      </>
     )
   }
 }
@@ -145,9 +143,9 @@ export default Home
 // }
 
 // const Home = () => (
-//   <context.Consumer>
+//   <CartContext.Consumer>
 //     {valueTaken => {
-//       const {listMenu, status, value, onOperator, chosenList} = valueTaken
+//       const {listMenu, status, valueCheck, onOperator, chosenList} = valueTaken
 
 //       const onChooseList = valueChosen => {
 //         chosenList(valueChosen)
@@ -158,14 +156,14 @@ export default Home
 //       }
 
 //       const renderLoader = () => (
-//         <div data-testid="loader" className="loader-container">
+//         <div className="loader-container">
 //           <Loader type="Rings" color="#00BFFF" height={80} width={80} />
 //         </div>
 //       )
 
 //       const renderSuccessView = () => {
 //         const filteredDishes = listMenu.filter(
-//           each => each.menu_category === value,
+//           each => each.menu_category === valueCheck,
 //         )
 //         return (
 //           <>
@@ -175,7 +173,7 @@ export default Home
 //                   <button
 //                     type="button"
 //                     className={
-//                       each.menu_category === value
+//                       each.menu_category === valueCheck
 //                         ? 'chosen-button'
 //                         : 'category-button'
 //                     }
@@ -206,7 +204,7 @@ export default Home
 //         </>
 //       )
 //     }}
-//   </context.Consumer>
+//   </CartContext.Consumer>
 // )
 
 // export default Home

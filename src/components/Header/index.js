@@ -14,6 +14,7 @@ const Header = props => (
         const {history} = props
         history.replace('/login')
       }
+
       const {match} = props
       const {path} = match
       const chosenHome = path === '/' ? 'chosenLink' : null
