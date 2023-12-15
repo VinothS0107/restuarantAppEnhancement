@@ -1,19 +1,19 @@
 import {BiFoodTag} from 'react-icons/bi'
-import context from '../../context'
+import CartContext from '../../context/CartContext'
 import './index.css'
 
 const Category = props => (
-  <context.Consumer>
+  <CartContext.Consumer>
     {propsContext => {
       const {addCartItem} = propsContext
-      const {nextComponent, onDecreaseIncrease} = props
+      const {nextComponent, onOperator} = props
 
       const onAddToCart = (dishId, operator) => {
-        onDecreaseIncrease(dishId, operator)
+        onOperator(dishId, operator)
       }
 
       const onAddItem = dishId => {
-        addCartItem(dishId)
+        addCartItem(dishId, nextComponent)
       }
 
       return (
@@ -82,7 +82,7 @@ const Category = props => (
         </ul>
       )
     }}
-  </context.Consumer>
+  </CartContext.Consumer>
 )
 
 export default Category

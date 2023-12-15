@@ -4,95 +4,32 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Home from './components/Home'
 import Cart from './components/Cart'
 import Login from './components/Login'
-import context from './context'
+import context from './context/CartContext'
 import './App.css'
-
-const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
 
 class App extends Component {
   state = {
-    listMenu: [],
-    status: apiStatusConstants.initial,
     restaurantName: '',
     value: '',
     cartList: [],
   }
 
   componentDidMount() {
-    this.getApi()
+    this.getApiRes()
   }
 
-  getApi = async () => {
-    this.setState({status: apiStatusConstants.inProgress})
+  getApiRes = async () => {
     const dishesApiUrl =
       'https://run.mocky.io/v3/77a7e71b-804a-4fbd-822c-3e365d3482cc'
     const response = await fetch(dishesApiUrl)
     const data = await response.json()
     const restaurantName = data[0].restaurant_name
-    const dishQuantityAdd = data[0].table_menu_list.map(each => ({
-      category_dishes: each.category_dishes.map(cate => ({
-        ...cate,
-        dish_quantity: '0',
-      })),
-      menu_category: each.menu_category,
-      menu_categoryId: each.menu_category_id,
-    }))
-    this.setState({
-      listMenu: dishQuantityAdd,
-      restaurantName,
-      value: dishQuantityAdd[0].menu_category,
-      status: apiStatusConstants.success,
-    })
+    this.setState({restaurantName})
   }
 
-  onOperator = (dishId, operator) => {
-    const {listMenu} = this.state
-    const finalValue = listMenu.map(each => ({
-      ...each,
-      category_dishes: each.category_dishes.map(eachDish => {
-        if (eachDish.dish_id === dishId) {
-          if (operator === 'decrement' && eachDish.dish_quantity > 0) {
-            this.setState(prevs => ({
-              count: prevs.count - 1,
-            }))
-            return {
-              ...eachDish,
-              dish_quantity: parseInt(eachDish.dish_quantity) - 1,
-            }
-          }
-          if (operator === 'increment') {
-            this.setState(prevs => ({
-              count: prevs.count + 1,
-            }))
-            return {
-              ...eachDish,
-              dish_quantity: parseInt(eachDish.dish_quantity) + 1,
-            }
-          }
-        }
-        return eachDish
-      }),
-    }))
-    this.setState({listMenu: finalValue})
-  }
-
-  chosenList = valueChosen => {
-    this.setState({value: valueChosen})
-  }
-
-  addCartItem = dishId => {
-    let filtered = []
-    const {listMenu, cartList} = this.state
-    listMenu.forEach(each => {
-      filtered = [...filtered, ...each.category_dishes]
-      return filtered
-    })
-    const chosenId = filtered.find(each => each.dish_id === dishId)
+  addCartItem = (dishId, nextComponent) => {
+    const {cartList} = this.state
+    const chosenId = nextComponent.find(each => each.dish_id === dishId)
     const checkCart = cartList.find(each => each.dish_id === chosenId.dish_id)
     if (checkCart === undefined) {
       this.setState({
@@ -150,20 +87,11 @@ class App extends Component {
   }
 
   render() {
-    const {
-      listMenu,
-      status,
-      restaurantName,
-      value,
-      count,
-      cartList,
-    } = this.state
+    const {restaurantName, value, count, cartList} = this.state
 
     return (
       <context.Provider
         value={{
-          listMenu,
-          status,
           restaurantName,
           value,
           count,
@@ -181,7 +109,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/login" component={Login} />
           <ProtectedRoute exact path="/" component={Home} />
-          <ProtectedRoute exact path="/cart" component={Cart} staticContext />
+          <ProtectedRoute exact path="/cart" component={Cart} />
         </Switch>
       </context.Provider>
     )

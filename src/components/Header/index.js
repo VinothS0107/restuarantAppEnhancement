@@ -1,11 +1,11 @@
 import {withRouter, Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import {AiOutlineShoppingCart} from 'react-icons/ai'
-import context from '../../context'
+import CartContext from '../../context/CartContext'
 import './index.css'
 
 const Header = props => (
-  <context.Consumer>
+  <CartContext.Consumer>
     {contextValue => {
       const {cartList, restaurantName} = contextValue
       const count = cartList.length
@@ -28,18 +28,19 @@ const Header = props => (
 
           <div className="card_container">
             <p className="my_order">
+              {' '}
               <Link to="/" className={`link ${chosenHome}`}>
-                Home
+                Home{' '}
               </Link>
             </p>
 
             <p className="my_order">My Orders</p>
-            <Link to="/cart" className="link" staticcontext="true">
-              <button type="button" className="cartButton">
-                {' '}
+
+            <button type="button" className="cartButton">
+              <Link to="/cart" className="link">
                 <AiOutlineShoppingCart className={`icon_cart ${chosenCart}`} />
-              </button>
-            </Link>
+              </Link>
+            </button>
 
             <p className="background">{count}</p>
             <button type="button" className="buttonLogout" onClick={onLogout}>
@@ -49,7 +50,7 @@ const Header = props => (
         </div>
       )
     }}
-  </context.Consumer>
+  </CartContext.Consumer>
 )
 
 export default withRouter(Header)
