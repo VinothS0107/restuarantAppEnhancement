@@ -16,10 +16,12 @@
   font-family: 'Roboto';
   font-size: 20px;
   font-weight: 700;
+  color: black;
 }
 @media (min-width: 768px) {
   .heading {
     font-size: 30px;
+    color: black;
   }
 }
 .card_container {
@@ -27,7 +29,12 @@
   align-items: center;
 }
 .my_order {
-  display: none;
+  display: flex;
+  font-family: 'Roboto';
+  font-size: 15px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0px 10px 0px 0px;
 }
 @media (min-width: 768px) {
   .my_order {
@@ -35,12 +42,14 @@
     font-family: 'Roboto';
     font-size: 20px;
     font-weight: 500;
-    color: #5b5b5b;
+    color: #000000;
+    margin: 0px 10px 0px 0px;
   }
 }
 .icon_cart {
   font-size: 30px;
-  color: #5b5b5b;
+  color: #000000;
+  cursor: pointer;
 }
 
 .background {
@@ -54,6 +63,7 @@
   text-align: center;
   color: #ffffff;
 }
+<<<<<<< HEAD
 .link {
   text-decoration: none;
   color: #000000;
@@ -65,6 +75,12 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+=======
+.cartButton {
+  background-color: transparent;
+  border: none;
+  cursor: po;
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
 }
 .buttonLogout {
   margin: 0px 10px 0px 20px;
@@ -76,3 +92,14 @@
   padding: 5px;
   cursor: pointer;
 }
+<<<<<<< HEAD
+=======
+
+.link {
+  text-decoration: none;
+  color: #000000;
+}
+.chosenLink {
+  color: brown !important;
+}
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3

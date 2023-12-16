@@ -1,6 +1,10 @@
 import {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import Cookies from 'js-cookie'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
 import './index.css'
 
 class Login extends Component {
@@ -58,7 +62,11 @@ class Login extends Component {
     const {username, password, error} = this.state
 
     return (
+<<<<<<< HEAD
       <div className="body-cont">
+=======
+      <div className="body-conat">
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
         <div className="login-container">
           <h1 className="main-heading">Login Form</h1>
           <form className="formContainer">

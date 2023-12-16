@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 import Header from '../Header'
 import CartContext from '../CartContext'
 import './index.css'
 
 const Cart = props => (
+=======
+import {Component} from 'react'
+
+import Header from '../Header'
+import CartContext from '../../context/CartContext'
+import './index.css'
+
+const Cart = () => (
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
   <CartContext.Consumer>
     {countValue => {
       const {
@@ -12,9 +22,12 @@ const Cart = props => (
         removeCartItem,
         removeAllCartItems,
       } = countValue
+<<<<<<< HEAD
 
       const {location} = props
       const {state} = location
+=======
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
       const cartLength = cartList.length
 
       const onDecrement = id => {
@@ -101,7 +114,11 @@ const Cart = props => (
 
       return (
         <>
+<<<<<<< HEAD
           <Header restaurantName={state} />
+=======
+          <Header />
+>>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
           {cartLength === 0 ? renderEmptyView() : renderCartListView()}
         </>
       )
