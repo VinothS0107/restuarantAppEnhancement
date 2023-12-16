@@ -54,3 +54,25 @@
   text-align: center;
   color: #ffffff;
 }
+.link {
+  text-decoration: none;
+  color: #000000;
+}
+.chosenLink {
+  color: #fb2e01;
+}
+.cartButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.buttonLogout {
+  margin: 0px 10px 0px 20px;
+  background-color: blue;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 5px;
+  cursor: pointer;
+}

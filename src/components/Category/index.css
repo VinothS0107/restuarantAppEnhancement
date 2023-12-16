@@ -154,3 +154,20 @@
   align-items: center;
   justify-content: space-between;
 }
+.addToCartButton {
+  background-color: #2986cc;
+  color: #ffffff;
+  border: none;
+  width: 110px;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  font-family: 'Roboto';
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 3px;
+  margin: 10px 0px 10px 0px;
+}
+.addToCartButton:hover {
+  background-color: darkred;
+}

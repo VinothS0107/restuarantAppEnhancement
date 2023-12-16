@@ -1,138 +1,99 @@
 import {Component} from 'react'
-import Loader from 'react-loader-spinner'
-import Header from './components/Header'
-import Category from './components/Category'
+import {Route, Switch} from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
+import Home from './components/Home'
+import Cart from './components/Cart'
+import Login from './components/Login'
+import CartContext from './components/CartContext'
+import NotFound from './components/NotFound'
 import './App.css'
 
-const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
-
 class App extends Component {
-  state = {
-    status: apiStatusConstants.initial,
-    restaurantName: '',
-    listMenu: [],
-    value: '',
-    count: 0,
-  }
+  state = {cartList: []}
 
-  componentDidMount() {
-    this.getApi()
-  }
-
-  getApi = async () => {
-    this.setState({status: apiStatusConstants.inProgress})
-    const dishesApiUrl =
-      'https://run.mocky.io/v3/77a7e71b-804a-4fbd-822c-3e365d3482cc'
-    const response = await fetch(dishesApiUrl)
-    const data = await response.json()
-    const restaurantName = data[0].restaurant_name
-    const dishQuantityAdd = data[0].table_menu_list.map(each => ({
-      category_dishes: each.category_dishes.map(cate => ({
-        ...cate,
-        dish_quantity: '0',
-      })),
-      menu_category: each.menu_category,
-      menu_categoryId: each.menu_category_id,
-    }))
-    this.setState({
-      listMenu: dishQuantityAdd,
-      restaurantName,
-      value: dishQuantityAdd[0].menu_category,
-      status: apiStatusConstants.success,
-    })
-  }
-
-  onChooseList = value => {
-    this.setState({value})
-  }
-
-  onIncreaseDecreaseCount = (dishId, operator) => {
-    const {listMenu} = this.state
-    const finalValue = listMenu.map(each => ({
-      ...each,
-      category_dishes: each.category_dishes.map(eachDish => {
-        if (eachDish.dish_id === dishId) {
-          if (operator === 'decrement' && eachDish.dish_quantity > 0) {
-            this.setState(prevs => ({
-              count: prevs.count - 1,
-            }))
-            return {
-              ...eachDish,
-              dish_quantity: parseInt(eachDish.dish_quantity) - 1,
-            }
-          }
-          if (operator === 'increment') {
-            this.setState(prevs => ({
-              count: prevs.count + 1,
-            }))
-            return {
-              ...eachDish,
-              dish_quantity: parseInt(eachDish.dish_quantity) + 1,
-            }
+  addCartItem = (nextComponent, dishId) => {
+    const {cartList} = this.state
+    const chosenId = nextComponent.find(each => each.dish_id === dishId)
+    const checkCart = cartList.find(each => each.dish_id === chosenId.dish_id)
+    if (checkCart === undefined) {
+      this.setState({
+        cartList: [...cartList, chosenId],
+      })
+    } else {
+      const checkList = cartList.map(each => {
+        if (each.dish_id === dishId) {
+          return {
+            ...each,
+            dish_quantity: each.dish_quantity + chosenId.dish_quantity,
           }
         }
-        return eachDish
-      }),
-    }))
-    this.setState({listMenu: finalValue})
+        return each
+      })
+      this.setState({
+        cartList: checkList,
+      })
+    }
   }
 
-  renderLoader = () => (
-    <div data-testid="loader" className="loader-container">
-      <Loader type="Rings" color="#00BFFF" height={80} width={80} />
-    </div>
-  )
+  incrementCartItemQuantity = id => {
+    const {cartList} = this.state
+    const increased = cartList.map(each => {
+      if (each.dish_id === id) {
+        return {...each, dish_quantity: each.dish_quantity + 1}
+      }
+      return each
+    })
+    this.setState({cartList: increased})
+  }
 
-  renderSuccessView = () => {
-    const {listMenu, value} = this.state
-    const filteredDishes = listMenu.filter(each => each.menu_category === value)
-    return (
-      <>
-        <ul className="menu_container">
-          {listMenu.map(each => (
-            <li key={each.menu_categoryId}>
-              <button
-                type="button"
-                className={
-                  each.menu_category === value
-                    ? 'chosen-button'
-                    : 'category-button'
-                }
-                onClick={() => this.onChooseList(each.menu_category)}
-              >
-                {each.menu_category}
-              </button>
-            </li>
-          ))}
-        </ul>
-        {filteredDishes.map(each => (
-          <Category
-            nextComponent={each.category_dishes}
-            key={each.menu_categoryId}
-            onDecreaseIncrease={this.onIncreaseDecreaseCount}
-          />
-        ))}
-      </>
-    )
+  decrementCartItemQuantity = id => {
+    const {cartList} = this.state
+    const checkQuantity = cartList.find(each => each.dish_id === id)
+    if (checkQuantity.dish_quantity === 1) {
+      const leftCartList = cartList.filter(each => each.dish_id !== id)
+      this.setState({cartList: leftCartList})
+    } else {
+      const decreased = cartList.map(each => {
+        if (each.dish_id === id) {
+          return {...each, dish_quantity: each.dish_quantity - 1}
+        }
+        return each
+      })
+      this.setState({cartList: decreased})
+    }
+  }
+
+  removeCartItem = id => {
+    const {cartList} = this.state
+    const leftCartList = cartList.filter(each => each.dish_id !== id)
+    this.setState({cartList: leftCartList})
+  }
+
+  removeAllCartItems = () => {
+    this.setState({cartList: []})
   }
 
   render() {
-    const {count, restaurantName, status} = this.state
-
+    const {cartList} = this.state
     return (
-      <>
-        <Header count={count} restaurantName={restaurantName} />
-        {status === apiStatusConstants.inProgress
-          ? this.renderLoader()
-          : this.renderSuccessView()}
-      </>
+      <CartContext.Provider
+        value={{
+          cartList,
+          removeAllCartItems: this.removeAllCartItems,
+          addCartItem: this.addCartItem,
+          removeCartItem: this.removeCartItem,
+          incrementCartItemQuantity: this.incrementCartItemQuantity,
+          decrementCartItemQuantity: this.decrementCartItemQuantity,
+        }}
+      >
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <ProtectedRoute exact path="/" component={Home} />
+          <ProtectedRoute exact path="/cart" component={Cart} />
+          <Route path="/not-found" component={NotFound} />
+        </Switch>
+      </CartContext.Provider>
     )
   }
 }
-
 export default App
