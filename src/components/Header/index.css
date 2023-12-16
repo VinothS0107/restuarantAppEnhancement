@@ -63,7 +63,6 @@
   text-align: center;
   color: #ffffff;
 }
-<<<<<<< HEAD
 .link {
   text-decoration: none;
   color: #000000;
@@ -75,12 +74,6 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-=======
-.cartButton {
-  background-color: transparent;
-  border: none;
-  cursor: po;
->>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
 }
 .buttonLogout {
   margin: 0px 10px 0px 20px;
@@ -92,14 +85,3 @@
   padding: 5px;
   cursor: pointer;
 }
-<<<<<<< HEAD
-=======
-
-.link {
-  text-decoration: none;
-  color: #000000;
-}
-.chosenLink {
-  color: brown !important;
-}
->>>>>>> 7dd1c480ce97635fb061f13b0b500f26186715d3
