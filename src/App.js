@@ -4,7 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Home from './components/Home'
 import Cart from './components/Cart'
 import Login from './components/Login'
-import CartContext from './components/CartContext'
+import CartContext from './CartContext'
 import NotFound from './components/NotFound'
 import './App.css'
 

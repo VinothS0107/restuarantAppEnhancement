@@ -1,5 +1,5 @@
 import Header from '../Header'
-import CartContext from '../CartContext'
+import CartContext from '../../CartContext'
 import './index.css'
 
 const Cart = props => (

@@ -1,7 +1,7 @@
 import {Link, withRouter} from 'react-router-dom'
 import {AiOutlineShoppingCart} from 'react-icons/ai'
 import Cookies from 'js-cookie'
-import CartContext from '../CartContext'
+import CartContext from '../../CartContext'
 
 import './index.css'
 

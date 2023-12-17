@@ -16,8 +16,7 @@ class Home extends Component {
     status: apiStatusConstants.initial,
     restaurantName: '',
     listMenu: [],
-    value: '',
-    count: 0,
+    valueCheck: '',
   }
 
   componentDidMount() {
@@ -42,13 +41,13 @@ class Home extends Component {
     this.setState({
       listMenu: dishQuantityAdd,
       restaurantName,
-      value: dishQuantityAdd[0].menu_category,
+      valueCheck: dishQuantityAdd[0].menu_category,
       status: apiStatusConstants.success,
     })
   }
 
   onChooseList = value => {
-    this.setState({value})
+    this.setState({valueCheck: value})
   }
 
   onIncreaseDecreaseCount = (dishId, operator) => {
@@ -89,8 +88,10 @@ class Home extends Component {
   )
 
   renderSuccessView = () => {
-    const {listMenu, value} = this.state
-    const filteredDishes = listMenu.filter(each => each.menu_category === value)
+    const {listMenu, valueCheck} = this.state
+    const filteredDishes = listMenu.filter(
+      each => each.menu_category === valueCheck,
+    )
     return (
       <>
         <ul className="menu_container">
@@ -99,7 +100,7 @@ class Home extends Component {
               <button
                 type="button"
                 className={
-                  each.menu_category === value
+                  each.menu_category === valueCheck
                     ? 'chosen-button'
                     : 'category-button'
                 }
