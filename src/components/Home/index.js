@@ -30,18 +30,19 @@ class Home extends Component {
     const response = await fetch(dishesApiUrl)
     const data = await response.json()
     const restaurantName = data[0].restaurant_name
-    const dishQuantityAdd = data[0].table_menu_list.map(each => ({
-      category_dishes: each.category_dishes.map(cate => ({
+    const tableMenuList = data[0].table_menu_list
+    const dishQuantityAdd = tableMenuList.map(each => ({
+      categoryDishes: each.category_dishes.map(cate => ({
         ...cate,
-        dish_quantity: '0',
+        dishQuantity: 0,
       })),
-      menu_category: each.menu_category,
-      menu_categoryId: each.menu_category_id,
+      menuCategory: each.menu_category,
+      menuCategoryId: each.menu_category_id,
     }))
     this.setState({
       listMenu: dishQuantityAdd,
       restaurantName,
-      valueCheck: dishQuantityAdd[0].menu_category,
+      valueCheck: dishQuantityAdd[0].menuCategory,
       status: apiStatusConstants.success,
     })
   }
@@ -54,24 +55,18 @@ class Home extends Component {
     const {listMenu} = this.state
     const finalValue = listMenu.map(each => ({
       ...each,
-      category_dishes: each.category_dishes.map(eachDish => {
+      categoryDishes: each.categoryDishes.map(eachDish => {
         if (eachDish.dish_id === dishId) {
-          if (operator === 'decrement' && eachDish.dish_quantity > 0) {
-            this.setState(prevs => ({
-              count: prevs.count - 1,
-            }))
+          if (operator === 'decrement' && eachDish.dishQuantity > 0) {
             return {
               ...eachDish,
-              dish_quantity: parseInt(eachDish.dish_quantity) - 1,
+              dishQuantity: eachDish.dishQuantity - 1,
             }
           }
           if (operator === 'increment') {
-            this.setState(prevs => ({
-              count: prevs.count + 1,
-            }))
             return {
               ...eachDish,
-              dish_quantity: parseInt(eachDish.dish_quantity) + 1,
+              dishQuantity: eachDish.dishQuantity + 1,
             }
           }
         }
@@ -90,31 +85,31 @@ class Home extends Component {
   renderSuccessView = () => {
     const {listMenu, valueCheck} = this.state
     const filteredDishes = listMenu.filter(
-      each => each.menu_category === valueCheck,
+      each => each.menuCategory === valueCheck,
     )
     return (
       <>
         <ul className="menu_container">
           {listMenu.map(each => (
-            <li key={each.menu_categoryId}>
+            <li key={each.menuCategoryId}>
               <button
                 type="button"
                 className={
-                  each.menu_category === valueCheck
+                  each.menuCategory === valueCheck
                     ? 'chosen-button'
                     : 'category-button'
                 }
-                onClick={() => this.onChooseList(each.menu_category)}
+                onClick={() => this.onChooseList(each.menuCategory)}
               >
-                {each.menu_category}
+                {each.menuCategory}
               </button>
             </li>
           ))}
         </ul>
         {filteredDishes.map(each => (
           <Category
-            nextComponent={each.category_dishes}
-            key={each.menu_categoryId}
+            nextComponent={each.categoryDishes}
+            key={each.menuCategoryId}
             onDecreaseIncrease={this.onIncreaseDecreaseCount}
           />
         ))}

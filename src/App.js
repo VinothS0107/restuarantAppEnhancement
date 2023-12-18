@@ -4,27 +4,28 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Home from './components/Home'
 import Cart from './components/Cart'
 import Login from './components/Login'
-import CartContext from './CartContext'
+import CartContext from './context/CartContext'
 import NotFound from './components/NotFound'
 import './App.css'
 
 class App extends Component {
   state = {cartList: []}
 
-  addCartItem = (nextComponent, dishId) => {
+  addCartItem = (dishId, nextComponent) => {
     const {cartList} = this.state
-    const chosenId = nextComponent.find(each => each.dish_id === dishId)
-    const checkCart = cartList.find(each => each.dish_id === chosenId.dish_id)
+
+    const chosenId = nextComponent.find(each => each.dishId === dishId)
+    const checkCart = cartList.find(each => each.dishId === chosenId.dishId)
     if (checkCart === undefined) {
       this.setState({
         cartList: [...cartList, chosenId],
       })
     } else {
       const checkList = cartList.map(each => {
-        if (each.dish_id === dishId) {
+        if (each.dishId === dishId) {
           return {
             ...each,
-            dish_quantity: each.dish_quantity + chosenId.dish_quantity,
+            dishQuantity: each.dishQuantity + chosenId.dishQuantity,
           }
         }
         return each
@@ -38,8 +39,8 @@ class App extends Component {
   incrementCartItemQuantity = id => {
     const {cartList} = this.state
     const increased = cartList.map(each => {
-      if (each.dish_id === id) {
-        return {...each, dish_quantity: each.dish_quantity + 1}
+      if (each.dishId === id) {
+        return {...each, dishQuantity: each.dishQuantity + 1}
       }
       return each
     })
@@ -48,14 +49,14 @@ class App extends Component {
 
   decrementCartItemQuantity = id => {
     const {cartList} = this.state
-    const checkQuantity = cartList.find(each => each.dish_id === id)
-    if (checkQuantity.dish_quantity === 1) {
-      const leftCartList = cartList.filter(each => each.dish_id !== id)
+    const checkQuantity = cartList.find(each => each.dishId === id)
+    if (checkQuantity.dishQuantity === 1) {
+      const leftCartList = cartList.filter(each => each.dishId !== id)
       this.setState({cartList: leftCartList})
     } else {
       const decreased = cartList.map(each => {
-        if (each.dish_id === id) {
-          return {...each, dish_quantity: each.dish_quantity - 1}
+        if (each.dishId === id) {
+          return {...each, dishQuantity: each.dishQuantity - 1}
         }
         return each
       })
@@ -65,7 +66,7 @@ class App extends Component {
 
   removeCartItem = id => {
     const {cartList} = this.state
-    const leftCartList = cartList.filter(each => each.dish_id !== id)
+    const leftCartList = cartList.filter(each => each.dishId !== id)
     this.setState({cartList: leftCartList})
   }
 

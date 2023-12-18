@@ -1,5 +1,5 @@
 import Header from '../Header'
-import CartContext from '../../CartContext'
+import CartContext from '../../context/CartContext'
 import './index.css'
 
 const Cart = props => (
@@ -43,41 +43,41 @@ const Cart = props => (
           </button>
           <ul className="unOrderList">
             {cartList.map(each => (
-              <li className="listItem" key={each.dish_id}>
+              <li className="listItem" key={each.dishId}>
                 <div className="detailsList">
                   <img
-                    src={each.dish_image}
-                    alt={each.dish_name}
+                    src={each.dishImage}
+                    alt={each.dishName}
                     className="dishImage"
                   />
                   <div className="detailsDiv">
-                    <p className="dishName">{each.dish_name}</p>
+                    <p className="dishName">{each.dishName}</p>
                   </div>
                 </div>
                 <div className="quantityAdjst">
                   <button
                     type="button"
                     className="buttonOperation"
-                    onClick={() => onDecrement(each.dish_id)}
+                    onClick={() => onDecrement(each.dishId)}
                   >
                     -
                   </button>
-                  <p className="quantity">{each.dish_quantity}</p>
+                  <p className="quantity">{each.dishQuantity}</p>
                   <button
                     type="button"
                     className="buttonOperation"
-                    onClick={() => onIncrement(each.dish_id)}
+                    onClick={() => onIncrement(each.dishId)}
                   >
                     +
                   </button>
                 </div>
                 <div className="priceContainer">
-                  <p>Rs {each.dish_quantity * each.dish_price} -/</p>
+                  <p>Rs {each.dishQuantity * each.dishPrice} -/</p>
                 </div>
                 <button
                   type="button"
                   className="removeButton"
-                  onClick={() => onRemoveSeparate(each.dish_id)}
+                  onClick={() => onRemoveSeparate(each.dishId)}
                 >
                   Remove
                 </button>

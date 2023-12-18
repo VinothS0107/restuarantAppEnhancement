@@ -1,9 +1,23 @@
 import {BiFoodTag} from 'react-icons/bi'
 import './index.css'
-import CartContext from '../../CartContext'
+import CartContext from '../../context/CartContext'
 
 const Category = props => {
   const {nextComponent, onDecreaseIncrease} = props
+
+  const updateComponent = nextComponent.map(each => ({
+    addonCat: each.addonCat,
+    dishQuantity: each.dishQuantity,
+    dishAvailability: each.dish_Availability,
+    dishType: each.dish_Type,
+    dishCalories: each.dish_calories,
+    dishCurrency: each.dish_currency,
+    dishDescription: each.dish_description,
+    dishId: each.dish_id,
+    dishImage: each.dish_image,
+    dishName: each.dish_name,
+    dishPrice: each.dish_price,
+  }))
 
   return (
     <CartContext.Consumer>
@@ -11,7 +25,7 @@ const Category = props => {
         const {addCartItem} = context
 
         const onAddToCartBtn = dishId => {
-          addCartItem(nextComponent, dishId)
+          addCartItem(dishId, updateComponent)
         }
 
         const onAddToCart = (dishId, operator) => {
@@ -20,38 +34,38 @@ const Category = props => {
 
         return (
           <ul className="dish">
-            {nextComponent.map(each => (
-              <li key={each.dish_id} className="list_dish">
+            {updateComponent.map(each => (
+              <li key={each.dishId} className="list_dish">
                 <div className="item_details">
-                  {each.dish_Type === 2 ? (
+                  {each.dishType === 2 ? (
                     <BiFoodTag className="veg" />
                   ) : (
                     <BiFoodTag className="non_veg" />
                   )}
                   <div className="sub_details">
-                    <h1 className="heading">{each.dish_name}</h1>
+                    <h1 className="heading">{each.dishName}</h1>
 
                     <p>
-                      {each.dish_currency} {each.dish_price}
+                      {each.dishCurrency} {each.dishPrice}
                     </p>
 
                     <p className="description_details">
-                      {each.dish_description}
+                      {each.dishDescription}
                     </p>
-                    {each.dish_Availability ? (
+                    {each.dishAvailability ? (
                       <div className="button_style">
                         <button
                           type="button"
                           className="button_value"
-                          onClick={() => onAddToCart(each.dish_id, 'decrement')}
+                          onClick={() => onAddToCart(each.dishId, 'decrement')}
                         >
                           -
                         </button>
-                        <p>{each.dish_quantity}</p>
+                        <p>{each.dishQuantity}</p>
                         <button
                           type="button"
                           className="button_value"
-                          onClick={() => onAddToCart(each.dish_id, 'increment')}
+                          onClick={() => onAddToCart(each.dishId, 'increment')}
                         >
                           +
                         </button>
@@ -62,11 +76,11 @@ const Category = props => {
                     {each.addonCat.length === 0 ? null : (
                       <p className="customise">Customizations available</p>
                     )}
-                    {each.dish_Availability && each.dish_quantity > 0 ? (
+                    {each.dishAvailability && each.dishQuantity > 0 ? (
                       <button
                         type="button"
                         className="addToCartButton"
-                        onClick={() => onAddToCartBtn(each.dish_id)}
+                        onClick={() => onAddToCartBtn(each.dishId)}
                       >
                         ADD TO CART
                       </button>
@@ -74,10 +88,10 @@ const Category = props => {
                   </div>
                 </div>
                 <div className="image_list">
-                  <p className="calories">{`${each.dish_calories} calories`}</p>
+                  <p className="calories">{`${each.dishCalories} calories`}</p>
                   <img
-                    src={each.dish_image}
-                    alt={each.dish_name}
+                    src={each.dishImage}
+                    alt={each.dishName}
                     className="dish_image"
                   />
                 </div>
