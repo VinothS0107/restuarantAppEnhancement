@@ -83,12 +83,13 @@ class Home extends Component {
   )
 
   renderSuccessView = () => {
-    const {listMenu, valueCheck} = this.state
+    const {listMenu, valueCheck,restaurantName} = this.state
     const filteredDishes = listMenu.filter(
       each => each.menuCategory === valueCheck,
     )
     return (
       <>
+        <Header restaurantName={restaurantName} />
         <ul className="menu_container">
           {listMenu.map(each => (
             <li key={each.menuCategoryId}>
@@ -122,7 +123,7 @@ class Home extends Component {
 
     return (
       <>
-        <Header restaurantName={restaurantName} />
+      
         {status === apiStatusConstants.inProgress
           ? this.renderLoader()
           : this.renderSuccessView()}
