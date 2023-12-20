@@ -72,7 +72,7 @@ const Cart = props => (
                   </button>
                 </div>
                 <div className="priceContainer">
-                  <p>Rs {each.dishQuantity * each.dishPrice} -/</p>
+                  <p>SAR {each.dishQuantity * each.dishPrice} -/</p>
                 </div>
                 <button
                   type="button"
